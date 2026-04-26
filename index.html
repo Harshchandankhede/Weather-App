@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nimbus — Weather Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <div>
+          <div class="logo-text">NIMBUS</div>
+          <div class="logo-sub">Weather Intelligence</div>
+        </div>
+      </div>
+      <div class="datetime" id="datetime"></div>
+    </header>
+
+    <!-- Search -->
+    <div class="search-section">
+      <div class="search-box">
+        <span class="search-icon">◎</span>
+        <input
+          type="text"
+          id="cityInput"
+          class="search-input"
+          placeholder="Search any city in the world..."
+          autocomplete="off"
+          list="indian-cities"
+        />
+        <datalist id="indian-cities">
+          <option value="Mumbai"></option>
+          <option value="Delhi"></option>
+          <option value="Bangalore"></option>
+          <option value="Hyderabad"></option>
+          <option value="Ahmedabad"></option>
+          <option value="Chennai"></option>
+          <option value="Kolkata"></option>
+          <option value="Surat"></option>
+          <option value="Pune"></option>
+          <option value="Jaipur"></option>
+          <option value="Lucknow"></option>
+          <option value="Kanpur"></option>
+          <option value="Nagpur"></option>
+          <option value="Indore"></option>
+          <option value="Thane"></option>
+          <option value="Bhopal"></option>
+          <option value="Visakhapatnam"></option>
+          <option value="Pimpri-Chinchwad"></option>
+          <option value="Patna"></option>
+          <option value="Vadodara"></option>
+          <option value="Ghaziabad"></option>
+          <option value="Ludhiana"></option>
+          <option value="Agra"></option>
+          <option value="Nashik"></option>
+          <option value="Faridabad"></option>
+          <option value="Meerut"></option>
+          <option value="Rajkot"></option>
+          <option value="Kalyan-Dombivli"></option>
+          <option value="Vasai-Virar"></option>
+          <option value="Varanasi"></option>
+          <option value="Srinagar"></option>
+          <option value="Aurangabad"></option>
+          <option value="Dhanbad"></option>
+          <option value="Amritsar"></option>
+          <option value="Navi Mumbai"></option>
+          <option value="Allahabad"></option>
+          <option value="Ranchi"></option>
+          <option value="Howrah"></option>
+          <option value="Coimbatore"></option>
+          <option value="Jabalpur"></option>
+          <option value="Gwalior"></option>
+          <option value="Vijayawada"></option>
+          <option value="Jodhpur"></option>
+          <option value="Madurai"></option>
+          <option value="Raipur"></option>
+          <option value="Kota"></option>
+          <option value="Guwahati"></option>
+          <option value="Chandigarh"></option>
+          <option value="Solapur"></option>
+          <option value="Hubli-Dharwad"></option>
+          <option value="Tiruchirappalli"></option>
+          <option value="Bareilly"></option>
+          <option value="Mysore"></option>
+          <option value="Tiruppur"></option>
+          <option value="Gurgaon"></option>
+          <option value="Aligarh"></option>
+          <option value="Jalandhar"></option>
+          <option value="Bhubaneswar"></option>
+          <option value="Salem"></option>
+          <option value="Warangal"></option>
+          <option value="Mira-Bhayandar"></option>
+          <option value="Guntur"></option>
+          <option value="Bhiwandi"></option>
+          <option value="Saharanpur"></option>
+          <option value="Gorakhpur"></option>
+          <option value="Bikaner"></option>
+          <option value="Amravati"></option>
+          <option value="Noida"></option>
+          <option value="Jamshedpur"></option>
+          <option value="Bhilai"></option>
+          <option value="Cuttack"></option>
+          <option value="Firozabad"></option>
+          <option value="Kochi"></option>
+          <option value="Bhavnagar"></option>
+          <option value="Dehradun"></option>
+          <option value="Durgapur"></option>
+          <option value="Asansol"></option>
+          <option value="Nanded"></option>
+          <option value="Kolhapur"></option>
+          <option value="Ajmer"></option>
+          <option value="Gulbarga"></option>
+        </datalist>
+        <button class="search-btn" onclick="getWeather()">SEARCH</button>
+      </div>
+
+      <div class="quick-cities">
+        <span class="quick-label">QUICK:</span>
+        <button class="city-pill" onclick="quickSearch('Mumbai')">Mumbai</button>
+        <button class="city-pill" onclick="quickSearch('Delhi')">Delhi</button>
+        <button class="city-pill" onclick="quickSearch('Bangalore')">Bangalore</button>
+        <button class="city-pill" onclick="quickSearch('Chennai')">Chennai</button>
+        <button class="city-pill" onclick="quickSearch('Hyderabad')">Hyderabad</button>
+        <button class="city-pill" onclick="quickSearch('Kolkata')">Kolkata</button>
+        <button class="city-pill" onclick="quickSearch('Ahmedabad')">Ahmedabad</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loadingDiv">
+      <div class="loader-ring">
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <div class="loading-text">FETCHING WEATHER DATA...</div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-card" id="errorDiv">
+      <div class="error-icon">⚠</div>
+      <div class="error-title" id="errorTitle">City not found</div>
+      <div class="error-sub" id="errorSub">Please check the city name and try again.</div>
+    </div>
+
+    <!-- API Note -->
+    <div class="api-note" id="apiNote">
+      <div class="api-note-icon">🔑</div>
+      <div>
+        <strong>Setup Required:</strong> Get a free API key from
+        <a href="https://openweathermap.org/api" target="_blank">openweathermap.org</a>
+        and replace <code>YOUR_API_KEY</code> in <code>script.js</code>
+      </div>
+    </div>
+
+    <!-- Main Weather Card -->
+    <div class="weather-wrap" id="weatherWrap">
+
+      <!-- Hero Card -->
+      <div class="hero-card" id="heroCard">
+        <div class="hero-left">
+          <div class="city-info">
+            <div class="city-name" id="cityName">—</div>
+            <div class="city-country" id="cityCountry">—</div>
+          </div>
+          <div class="temp-display">
+            <span class="temp-value" id="tempValue">—</span>
+            <span class="temp-unit">°C</span>
+          </div>
+          <div class="condition-text" id="conditionText">—</div>
+          <div class="feels-row">
+            <span id="feelsLike">—</span>
+            <span class="temp-range" id="tempRange">—</span>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="weather-emoji" id="weatherEmoji">🌤</div>
+          <div class="weather-label" id="weatherLabel">—</div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-body">
+            <div class="stat-value" id="humidity">—</div>
+            <div class="stat-label">HUMIDITY</div>
+          </div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill" id="humidityBar"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💨</div>
+          <div class="stat-body">
+            <div class="stat-value" id="windSpeed">—</div>
+            <div class="stat-label">WIND SPEED</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👁</div>
+          <div class="stat-body">
+            <div class="stat-value" id="visibility">—</div>
+            <div class="stat-label">VISIBILITY</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌡</div>
+          <div class="stat-body">
+            <div class="stat-value" id="pressure">—</div>
+            <div class="stat-label">PRESSURE</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">☁</div>
+          <div class="stat-body">
+            <div class="stat-value" id="cloudCover">—</div>
+            <div class="stat-label">CLOUD COVER</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌊</div>
+          <div class="stat-body">
+            <div class="stat-value" id="seaLevel">—</div>
+            <div class="stat-label">SEA LEVEL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sun Times -->
+      <div class="sun-card">
+        <div class="sun-item">
+          <div class="sun-arc sunrise-arc">
+            <div class="sun-dot"></div>
+          </div>
+          <div class="sun-label">SUNRISE</div>
+          <div class="sun-time" id="sunrise">—</div>
+        </div>
+        <div class="sun-divider">
+          <div class="sun-line"></div>
+          <div class="uvi-badge" id="uviLabel">DAY</div>
+          <div class="sun-line"></div>
+        </div>
+        <div class="sun-item">
+          <div class="sun-arc sunset-arc">
+            <div class="sun-dot"></div>
+          </div>
+          <div class="sun-label">SUNSET</div>
+          <div class="sun-time" id="sunset">—</div>
+        </div>
+      </div>
+
+    </div><!-- /weather-wrap -->
+
+  </div><!-- /app -->
+
+  <script src="script.js"></script>
+</body>
+</html>
